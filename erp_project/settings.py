@@ -52,10 +52,20 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    # 'accounts.middleware.EnsureProfileMiddleware',  # 🔴 Removed due to missing module
+    # 'accounts.middleware.EnsureProfileAndDepartmentMiddleware',  # 🔧 Commented out to avoid import error
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+
+# 🔐 Azure AD Department Mapping
+DEPARTMENT_EMAIL_MAP = {
+    'abir@DzignscapeProfessionals.onmicrosoft.com': 'construction',
+    'bokul@DzignscapeProfessionals.onmicrosoft.com': 'design',
+}
+
+# 🔐 Azure AD Login Redirect
+LOGIN_URL = '/.auth/login/aad'
 
 # 🌐 URL & WSGI
 ROOT_URLCONF = 'erp_project.urls'
@@ -102,8 +112,12 @@ USE_TZ = True
 
 # 📦 Static Files
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+    
+]
+
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # 🆔 Default Primary Key
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
