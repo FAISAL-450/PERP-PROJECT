@@ -97,51 +97,61 @@
 <body>
 
 
-<div class="sidebar">
+  
+{% if request.user.is_authenticated and request.user.profile %}
+  {% with request.user.profile as profile %}
+    <div class="sidebar {% if profile.department == 'construction' %}construction{% endif %}">
+  {% endwith %}
+{% else %}
+  <div class="sidebar">
+{% endif %}
+
   <div class="sidebar-header">ERP Navigation</div>
   <ul class="sidebar-menu">
 
     {% if request.user.is_authenticated %}
-      {% with request.user.profile as profile %}
+      {% if request.user.profile %}
+        {% with request.user.profile as profile %}
 
-        {# --- Home: visible to users NOT in construction/design AND NOT superusers --- #}
-        {% if profile.department != 'construction' and profile.department != 'design' and not request.user.is_superuser %}
-          <li class="nav-item">
-            <a href="{% url 'home' %}">
-              <span><i class="fas fa-home"></i> Home</span>
-            </a>
-          </li>
-        {% endif %}
+          {% if profile.department != 'construction' and profile.department != 'design' and not request.user.is_superuser %}
+            <li class="nav-item">
+              <a href="{% url 'home' %}">
+                <span><i class="fas fa-home"></i> Home</span>
+              </a>
+            </li>
+          {% endif %}
 
-        {# --- Construction Section: visible to construction OR superusers --- #}
-        {% if profile.department == 'construction' or request.user.is_superuser %}
-          <li class="dropdown">
-            <a class="dropdown-toggle">
-              <span><i class="fas fa-hard-hat"></i> Construction</span>
-              <i class="fa fa-chevron-down toggle-icon"></i>
-            </a>
-            <ul class="dropdown-menu">
-              <li><a href="{% url 'project_dashboard' %}?department=construction">Project Detailed</a></li>
-            </ul>
-          </li>
-        {% endif %}
+          {% if profile.department == 'construction' or request.user.is_superuser %}
+            <li class="dropdown">
+              <a class="dropdown-toggle">
+                <span><i class="fas fa-hard-hat"></i> Construction</span>
+                <i class="fa fa-chevron-down toggle-icon"></i>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="{% url 'project_dashboard' %}?department=construction">Project Detailed</a></li>
+              </ul>
+            </li>
+          {% endif %}
 
-        {# --- Design Section: visible to design OR superusers --- #}
-        {% if profile.department == 'design' or request.user.is_superuser %}
-          <li class="dropdown">
-            <a class="dropdown-toggle">
-              <span><i class="fas fa-pencil-ruler"></i> Design</span>
-              <i class="fa fa-chevron-down toggle-icon"></i>
-            </a>
-            <ul class="dropdown-menu">
-              <li><a href="{% url 'client_dashboard' %}?department=design">Client Detailed</a></li>
-            </ul>
-          </li>
-        {% endif %}
+          {% if profile.department == 'design' or request.user.is_superuser %}
+            <li class="dropdown">
+              <a class="dropdown-toggle">
+                <span><i class="fas fa-pencil-ruler"></i> Design</span>
+                <i class="fa fa-chevron-down toggle-icon"></i>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="{% url 'client_dashboard' %}?department=design">Client Detailed</a></li>
+              </ul>
+            </li>
+          {% endif %}
 
-      {% endwith %}
+        {% endwith %}
+      {% else %}
+        <li class="nav-item">
+          <span style="color: red;">No profile found</span>
+        </li>
+      {% endif %}
     {% else %}
-      {# --- Home for anonymous users --- #}
       <li class="nav-item">
         <a href="{% url 'home' %}">
           <span><i class="fas fa-home"></i> Home</span>
@@ -151,6 +161,7 @@
 
   </ul>
 </div>
+
 
 
   <div class="main-content">
