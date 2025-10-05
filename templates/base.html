@@ -11,13 +11,14 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- Department-specific stylesheet -->
-  {% if request.user.is_authenticated %}
-    {% with request.user.profile.department|default_if_none:"default"|lower as dept %}
-      <link rel="stylesheet" href="{% static "css/%s/%s.css"|format:dept %}">
-    {% endwith %}
-  {% else %}
-    <link rel="stylesheet" href="{% static 'css/default.css' %}">
-  {% endif %}
+{% if request.user.is_authenticated %}
+  {% with request.user.profile.department|default_if_none:"default"|lower as dept %}
+    <link rel="stylesheet" href="{% static 'css/'|add:dept|add:'/'|add:dept|add:'.css' %}">
+  {% endwith %}
+{% else %}
+  <link rel="stylesheet" href="{% static 'css/default.css' %}">
+{% endif %}
+
 
   <style>
     body {
