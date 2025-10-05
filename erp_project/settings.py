@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'project',
     'client',
     'accounts',
-
 ]
 
 # 🧱 Middleware
@@ -52,16 +51,15 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    # 'accounts.middleware.EnsureProfileAndDepartmentMiddleware',  # 🔧 Commented out to avoid import error
+    'accounts.middleware.EnsureProfileAndDepartmentMiddleware',  # ✅ Custom middleware for profile and department mapping
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-
 # 🔐 Azure AD Department Mapping
 DEPARTMENT_EMAIL_MAP = {
-    'abir@DzignscapeProfessionals.onmicrosoft.com': 'construction',
-    'bokul@DzignscapeProfessionals.onmicrosoft.com': 'design',
+    'abir@dzignscapeprofessionals.onmicrosoft.com': 'construction',
+    'bokul@dzignscapeprofessionals.onmicrosoft.com': 'design',
 }
 
 # 🔐 Azure AD Login Redirect
@@ -114,13 +112,13 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
-    
 ]
-
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # 🆔 Default Primary Key
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
 
 
 
