@@ -56,6 +56,13 @@ jobs:
       - name: 📂 Unzip artifact
         run: unzip release.zip
 
+      - name: 🌐 Set environment variables
+        run: |
+          echo "DB_NAME=${{ secrets.DB_NAME }}" >> $GITHUB_ENV
+          echo "DB_USER=${{ secrets.DB_USER }}" >> $GITHUB_ENV
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> $GITHUB_ENV
+
       - name: 🔐 Login to Azure with OIDC
         uses: azure/login@v2
         with:
@@ -69,3 +76,4 @@ jobs:
           app-name: 'PERP-AC-App'
           slot-name: 'Production'
           package: release.zip
+
