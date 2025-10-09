@@ -15,10 +15,10 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      DATABASE_NAME: ${{ secrets.DB_NAME }}
-      DATABASE_USER: ${{ secrets.DB_USER }}
-      DATABASE_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      DATABASE_HOST: ${{ secrets.DB_HOST }}
+      DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+      DATABASE_USER: ${{ secrets.DATABASE_USER }}
+      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+      DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
 
     steps:
       - name: 📥 Checkout code
@@ -34,15 +34,18 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: 🧠 Debug environment
+      - name: 🧠 Debug environment variables
         run: |
-          echo "DATABASE_NAME=$DATABASE_NAME"
-          echo "DATABASE_USER=$DATABASE_USER"
-          echo "DATABASE_HOST=$DATABASE_HOST"
+          echo "DATABASE_NAME=${{ env.DATABASE_NAME }}"
+          echo "DATABASE_USER=${{ env.DATABASE_USER }}"
+          echo "DATABASE_HOST=${{ env.DATABASE_HOST }}"
+
+      - name: ✅ Django health check
+        run: python manage.py check
 
       - name: 🔧 Django setup
         run: |
-          python manage.py collectstatic --noinput
+          python manage.py collectstatic --noinput --skip-checks
           python manage.py migrate
 
       - name: 📦 Package artifact for deployment
@@ -81,5 +84,7 @@ jobs:
           app-name: 'PERP-AC-App'
           slot-name: 'Production'
           package: release.zip
+
+
 
 
