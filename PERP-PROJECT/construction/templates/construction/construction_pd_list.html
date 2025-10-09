@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/construction/construction.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="construction-wrapper project-view">
+    <h2>Construction – Project Detailed</h2>
+    {% include 'project/project_dashboard.html' %}
+  </div>
+{% endblock %}
+
+
+
+
+
