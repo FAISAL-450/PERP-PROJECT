@@ -103,8 +103,6 @@ TEMPLATES = [
 ]
 
 # 🗄️ Database
-USE_AZURE_DB = os.environ.get("USE_AZURE_DB", "true") == "true"
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
