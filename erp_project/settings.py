@@ -1,4 +1,3 @@
-# 🧠 Core Imports
 import os
 import json
 from pathlib import Path
@@ -43,10 +42,8 @@ SECURE_HSTS_SECONDS = 3600 if not DEBUG else 0
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 
-
 # 📦 Installed Apps
 INSTALLED_APPS = [
-    # Django Core
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -105,9 +102,9 @@ TEMPLATES = [
     },
 ]
 
+# 🗄️ Database
 USE_AZURE_DB = os.environ.get("USE_AZURE_DB", "true") == "true"
 
-# 🗄️ Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -146,6 +143,10 @@ STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesSto
 
 # 🆔 Default Primary Key
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+
 
 
 
