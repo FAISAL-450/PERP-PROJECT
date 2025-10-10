@@ -101,6 +101,8 @@
 </head>
 <body>
 
+  
+
 {% if request.user.is_authenticated %}
   <div class="sidebar">
     <div class="sidebar-header">ERP SOLUTION</div>
@@ -164,6 +166,8 @@
     </ul>
   </div>
 {% endif %}
+
+
 
 <div class="main-content">
   {% block content %}{% endblock %}
