@@ -1,3 +1,4 @@
+# 🧠 Core Imports
 import os
 import json
 from pathlib import Path
@@ -9,24 +10,26 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-...')
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
-# 🌍 Hosts and CSRF for Azure-(Correct for minimize-403 Forbidden Error)
+# 🌍 Hosts and CSRF-(Correct for minimize-403 Forbidden Error)
 try:
     ALLOWED_HOSTS = json.loads(os.environ.get(
         'DJANGO_ALLOWED_HOSTS',
-        '["perp-ac-app.azurewebsites.net"]'
+        '["localhost", "127.0.0.1", "perp-ac-app.azurewebsites.net"]'
     ))
 except (json.JSONDecodeError, TypeError):
-    ALLOWED_HOSTS = ["perp-ac-app.azurewebsites.net"]
+    ALLOWED_HOSTS = ["localhost", "127.0.0.1", "perp-ac-app.azurewebsites.net"]
 
 try:
     CSRF_TRUSTED_ORIGINS = json.loads(os.environ.get(
         'CSRF_TRUSTED_ORIGINS',
-        '["https://perp-ac-app.azurewebsites.net", " https://perp-ac-app.azurewebsites.net"]'
+        '["http://localhost", "http://127.0.0.1", "https://perp-ac-app.azurewebsites.net", "http://perp-ac-app.azurewebsites.net"]'
     ))
 except (json.JSONDecodeError, TypeError):
     CSRF_TRUSTED_ORIGINS = [
-        " https://perp-ac-app.azurewebsites.net",
-        " https://perp-ac-app.azurewebsites.net"
+        "http://localhost",
+        "http://127.0.0.1",
+        "https://perp-ac-app.azurewebsites.net",
+        "http://perp-ac-app.azurewebsites.net"
     ]
 
 # 🔐 CSRF and Cookie Security for Azure
@@ -59,7 +62,6 @@ INSTALLED_APPS = [
     'client',
     'accounts',
 ]
-
 # 🧱 Middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -74,8 +76,8 @@ MIDDLEWARE = [
 
 # 🔐 Azure AD Department Mapping
 DEPARTMENT_EMAIL_MAP = {
-    'abir@dzignscapeprofessionals.onmicrosoft.com': 'construction',
-    'bokul@dzignscapeprofessionals.onmicrosoft.com': 'design',
+    'elias@dzignscapeprofessionals.onmicrosoft.com': 'construction',
+    'jakir@dzignscapeprofessionals.onmicrosoft.com': 'sales',
 }
 
 # 🔐 Azure AD Login Redirect
@@ -105,15 +107,8 @@ TEMPLATES = [
 # 🗄️ Database
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DATABASE_NAME'),
-        'USER': os.environ.get('DATABASE_USER'),
-        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
-        'HOST': os.environ.get('DATABASE_HOST'),
-        'PORT': '5432',
-        'OPTIONS': {
-            'sslmode': 'require',
-        },
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -141,6 +136,7 @@ STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesSto
 
 # 🆔 Default Primary Key
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 
 
 
