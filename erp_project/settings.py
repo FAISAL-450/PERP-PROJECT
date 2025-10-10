@@ -76,8 +76,8 @@ MIDDLEWARE = [
 
 # 🔐 Azure AD Department Mapping
 DEPARTMENT_EMAIL_MAP = {
-    'elias@dzignscapeprofessionals.onmicrosoft.com': 'construction',
-    'jakir@dzignscapeprofessionals.onmicrosoft.com': 'sales',
+    'abir@dzignscapeprofessionals.onmicrosoft.com': 'construction',
+    'bokul@dzignscapeprofessionals.onmicrosoft.com': 'design',
 }
 
 # 🔐 Azure AD Login Redirect
