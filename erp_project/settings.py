@@ -9,7 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-...')
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
-# 🌍 Hosts and CSRF for Azure (Corrected for perp-ac-app)
+# 🌍 Hosts and CSRF for Azure-(Correct for minimize-403 Forbidden Error)
 try:
     ALLOWED_HOSTS = json.loads(os.environ.get(
         'DJANGO_ALLOWED_HOSTS',
@@ -21,11 +21,12 @@ except (json.JSONDecodeError, TypeError):
 try:
     CSRF_TRUSTED_ORIGINS = json.loads(os.environ.get(
         'CSRF_TRUSTED_ORIGINS',
-        '["https://perp-ac-app.azurewebsites.net"]'
+        '["https://perp-ac-app.azurewebsites.net", " https://perp-ac-app.azurewebsites.net"]'
     ))
 except (json.JSONDecodeError, TypeError):
     CSRF_TRUSTED_ORIGINS = [
-        "https://perp-ac-app.azurewebsites.net"
+        " https://perp-ac-app.azurewebsites.net",
+        " https://perp-ac-app.azurewebsites.net"
     ]
 
 # 🔐 CSRF and Cookie Security for Azure
