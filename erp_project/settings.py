@@ -9,30 +9,24 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-...')
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
-# 🌍 Hosts and CSRF for Azure
-try:
-    ALLOWED_HOSTS = json.loads(os.environ.get(
-        'DJANGO_ALLOWED_HOSTS',
-        '["perp-ac-app.azurewebsites.net"]'
-    ))
-except (json.JSONDecodeError, TypeError):
-    ALLOWED_HOSTS = ["perp-ac-app.azurewebsites.net"]
+# 🌍 Hosts and CSRF for Azure-(Correct for minimize-403 Forbidden Erroe)
+default_hosts = ["perp-ac-app.azurewebsites.net"]
+default_csrf_origins = [f"https://{default_hosts[0]}"]
 
 try:
-    CSRF_TRUSTED_ORIGINS = json.loads(os.environ.get(
-        'CSRF_TRUSTED_ORIGINS',
-        '["https://perp-ac-app.azurewebsites.net", "http://perp-ac-app.azurewebsites.net"]'
-    ))
+    ALLOWED_HOSTS = json.loads(os.environ.get("DJANGO_ALLOWED_HOSTS", json.dumps(default_hosts)))
 except (json.JSONDecodeError, TypeError):
-    CSRF_TRUSTED_ORIGINS = [
-        "https://perp-ac-app.azurewebsites.net",
-        "http://perp-ac-app.azurewebsites.net"
-    ]
+    ALLOWED_HOSTS = default_hosts
+
+try:
+    CSRF_TRUSTED_ORIGINS = json.loads(os.environ.get("CSRF_TRUSTED_ORIGINS", json.dumps(default_csrf_origins)))
+except (json.JSONDecodeError, TypeError):
+    CSRF_TRUSTED_ORIGINS = default_csrf_origins
 
 # 🔐 CSRF and Cookie Security for Azure
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_HTTPONLY = False
+CSRF_COOKIE_HTTPONLY = False  # Set to True if you want to prevent JavaScript access
 
 # ⚠️ Prevent redirect loops: Let Azure handle HTTPS
 SECURE_SSL_REDIRECT = False
