@@ -14,12 +14,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    env:
-      DATABASE_NAME: ${{ secrets.DB_NAME }}
-      DATABASE_USER: ${{ secrets.DB_USER }}
-      DATABASE_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      DATABASE_HOST: ${{ secrets.DB_HOST }}
-
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
@@ -33,12 +27,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-
-      - name: 🧠 Debug environment
-        run: |
-          echo "DATABASE_NAME=$DATABASE_NAME"
-          echo "DATABASE_USER=$DATABASE_USER"
-          echo "DATABASE_HOST=$DATABASE_HOST"
 
       - name: 🔧 Django setup
         run: |
@@ -81,6 +69,7 @@ jobs:
           app-name: 'PERP-AC-App'
           slot-name: 'Production'
           package: release.zip
+
 
 
 
