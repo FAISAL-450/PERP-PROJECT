@@ -15,7 +15,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-9^6na*me7)=)1b3_zx1kggfe@b7j)c(thip)3&&bbg*395le=f')
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
-# 🌍 Hosts and CSRF-(Correct for minimize-403 Forbidden Error)
+# 🌍 Hosts and CSRF — Hardened for Azure
 try:
     ALLOWED_HOSTS = json.loads(os.environ.get(
         'DJANGO_ALLOWED_HOSTS',
@@ -27,20 +27,20 @@ except (json.JSONDecodeError, TypeError):
 try:
     CSRF_TRUSTED_ORIGINS = json.loads(os.environ.get(
         'CSRF_TRUSTED_ORIGINS',
-        '["http://localhost", "http://127.0.0.1", "https://perp-ac-app.azurewebsites.net", "http://perp-ac-app.azurewebsites.net"]'
+        '["https://perp-ac-app.azurewebsites.net"]'
     ))
 except (json.JSONDecodeError, TypeError):
     CSRF_TRUSTED_ORIGINS = [
-        "http://localhost",
-        "http://127.0.0.1",
-        "https://perp-ac-app.azurewebsites.net",
-        "http://perp-ac-app.azurewebsites.net"
+        "https://perp-ac-app.azurewebsites.net"
     ]
 
 # 🔐 CSRF and Cookie Security for Azure
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = not DEBUG
+SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_HTTPONLY = False
+
+# ✅ Trust Azure's HTTPS proxy
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # ⚠️ Prevent redirect loops: Let Azure handle HTTPS
 SECURE_SSL_REDIRECT = False
