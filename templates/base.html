@@ -101,65 +101,69 @@
 </head>
 <body>
 
-  
 {% if request.user.is_authenticated %}
   <div class="sidebar">
     <div class="sidebar-header">ERP SOLUTION</div>
     <ul class="sidebar-menu">
-      <!-- Always show Home -->
-      <li class="nav-item">
-        <a href="{% url 'home' %}">
-          <span><i class="fas fa-home"></i> Home</span>
-        </a>
-      </li>
-
-      <!-- Construction for Asif User -->
-      <li class="dropdown">
-        <a class="dropdown-toggle" role="button" aria-expanded="false">
-          <span><i class="fas fa-hard-hat"></i> Construction</span>
-          <i class="fa fa-chevron-down toggle-icon"></i>
-        </a>
-        <ul class="dropdown-menu">
-          <li><a href="{% url 'project_dashboard' %}?department=construction">Project Detailed</a></li>
-        </ul>
-      </li>
-
-      <!-- Design for Belal User -->
-      <li class="dropdown">
-        <a class="dropdown-toggle" role="button" aria-expanded="false">
-          <span><i class="fas fa-chart-line"></i> Design</span>
-          <i class="fa fa-chevron-down toggle-icon"></i>
-        </a>
-        <ul class="dropdown-menu">
-          <li><a href="{% url 'client_dashboard' %}?department=design">Client Detailed</a></li>
-        </ul>
-      </li>
-
-      <!-- Construction & Design for Jakir User (Superuser) -->
-      {% if request.user.is_superuser %}
-        <li class="dropdown">
-          <a class="dropdown-toggle" role="button" aria-expanded="false">
-            <span><i class="fas fa-hard-hat"></i> Construction</span>
-            <i class="fa fa-chevron-down toggle-icon"></i>
+      {% with request.user.email as email %}
+        <!-- Always show Home -->
+        <li class="nav-item">
+          <a href="{% url 'home' %}">
+            <span><i class="fas fa-home"></i> Home</span>
           </a>
-          <ul class="dropdown-menu">
-            <li><a href="{% url 'project_dashboard' %}?department=construction">Project Detailed</a></li>
-          </ul>
         </li>
-        <li class="dropdown">
-          <a class="dropdown-toggle" role="button" aria-expanded="false">
-            <span><i class="fas fa-chart-line"></i> Design</span>
-            <i class="fa fa-chevron-down toggle-icon"></i>
-          </a>
-          <ul class="dropdown-menu">
-            <li><a href="{% url 'client_dashboard' %}?department=design">Client Detailed</a></li>
-          </ul>
-        </li>
-      {% endif %}
+
+        <!-- Construction Section for Abir -->
+        {% if email == 'abir@dzignscapeprofessionals.onmicrosoft.com' %}
+          <li class="dropdown">
+            <a class="dropdown-toggle" role="button" aria-expanded="false">
+              <span><i class="fas fa-hard-hat"></i> Construction</span>
+              <i class="fa fa-chevron-down toggle-icon"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="{% url 'project_dashboard' %}?department=construction">Project Detailed</a></li>
+            </ul>
+          </li>
+        {% endif %}
+
+        <!-- Design Section for Bokul -->
+        {% if email == 'bokul@dzignscapeprofessionals.onmicrosoft.com' %}
+          <li class="dropdown">
+            <a class="dropdown-toggle" role="button" aria-expanded="false">
+              <span><i class="fas fa-chart-line"></i> Design</span>
+              <i class="fa fa-chevron-down toggle-icon"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="{% url 'client_dashboard' %}?department=design">Client Detailed</a></li>
+            </ul>
+          </li>
+        {% endif %}
+
+        <!-- Superuser override -->
+        {% if email == 'admin@dzignscapeprofessionals.onmicrosoft.com' %}
+          <li class="dropdown">
+            <a class="dropdown-toggle" role="button" aria-expanded="false">
+              <span><i class="fas fa-hard-hat"></i> Construction (Admin)</span>
+              <i class="fa fa-chevron-down toggle-icon"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="{% url 'project_dashboard' %}?department=construction">Project Detailed</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" role="button" aria-expanded="false">
+              <span><i class="fas fa-chart-line"></i> Design (Admin)</span>
+              <i class="fa fa-chevron-down toggle-icon"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="{% url 'client_dashboard' %}?department=design">Client Detailed</a></li>
+            </ul>
+          </li>
+        {% endif %}
+      {% endwith %}
     </ul>
   </div>
 {% endif %}
-
 
 <div class="main-content">
   {% block content %}{% endblock %}
@@ -177,5 +181,6 @@
 
 </body>
 </html>
+
 
 
