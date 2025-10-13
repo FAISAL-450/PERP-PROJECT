@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from project.models import Project
-from customer.models import Client
+from client.models import Client
 
 @login_required
 def home_view(request):
