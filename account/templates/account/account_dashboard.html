@@ -17,7 +17,7 @@
 
   <!-- 📝 Account Form -->
 <section class="form-section">
-  <header class="form-header" onclick="toggleForm()" role="button" aria-expanded="true">
+  <header class="form-header" onclick="toggleForm()" role="button" aria-expanded="true" tabindex="0">
     <h2><i class="fas fa-university"></i> ACCOUNT FORM 
       <span id="toggle-icon"><i class="fas fa-chevron-down"></i></span>
     </h2>
@@ -45,7 +45,7 @@
           {% if mode == 'edit' %}Update{% else %}Save{% endif %}
         </button>
         {% if mode != 'list' %}
-          <a href="{% url 'account_dashboard' %}?q={{ query }}" class="btn btn-gray" role="button">Cancel</a>
+          <a href="{% url 'account_dashboard' %}?q={{ query }}" class="btn btn-gray">Cancel</a>
         {% endif %}
       </div>
     </form>
@@ -55,7 +55,7 @@
 <!-- 🔍 Filter/Search -->
 <section class="filter-section">
   <h2>🔍 FILTERING</h2>
-  <form method="get">
+  <form method="get" action="{% url 'account_dashboard' %}">
     <input type="text" name="q" value="{{ query }}" placeholder="Search by name, code or description">
     <button type="submit" class="btn btn-blue" aria-label="Apply filter">Filter</button>
   </form>
@@ -89,7 +89,7 @@
           <td>{{ account.currency }}</td>
           <td>{{ account.cost_center|default:"—" }}</td>
           <td>
-            <a href="{% url 'edit_account' account.id %}?q={{ query }}" class="btn btn-yellow action-btn" role="button" aria-label="Edit account {{ account.name }}">
+            <a href="{% url 'edit_account' account.id %}?q={{ query }}" class="btn btn-yellow action-btn" aria-label="Edit account {{ account.name }}">
               <i class="fas fa-edit"></i> Edit
             </a>
             <form method="post" action="{% url 'account_delete' account.id %}?q={{ query }}" style="display:inline;">
@@ -110,11 +110,11 @@
     <footer class="pagination-footer">
       <nav class="pagination" aria-label="Account pagination">
         {% if accounts.has_previous %}
-          <a href="?q={{ query }}&page={{ accounts.previous_page_number }}" class="btn page-link" role="button" aria-label="Previous page">Previous</a>
+          <a href="?q={{ query }}&page={{ accounts.previous_page_number }}" class="btn page-link" aria-label="Previous page">Previous</a>
         {% endif %}
         <span class="page-info">Page {{ accounts.number }} of {{ accounts.paginator.num_pages }}</span>
         {% if accounts.has_next %}
-          <a href="?q={{ query }}&page={{ accounts.next_page_number }}" class="btn page-link" role="button" aria-label="Next page">Next</a>
+          <a href="?q={{ query }}&page={{ accounts.next_page_number }}" class="btn page-link" aria-label="Next page">Next</a>
         {% endif %}
       </nav>
     </footer>
