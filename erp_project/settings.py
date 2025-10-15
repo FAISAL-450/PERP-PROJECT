@@ -68,6 +68,8 @@ INSTALLED_APPS = [
     'project',
     'client',
     'accounts',
+    'finance',
+    'account',
 ]
 
 # 🧱 Middleware
@@ -84,9 +86,12 @@ MIDDLEWARE = [
 
 # 🔐 Azure AD Department Mapping
 DEPARTMENT_EMAIL_MAP = {
-    'abir@dzignscapeprofessionals.onmicrosoft.com': 'construction',
-    'bokul@dzignscapeprofessionals.onmicrosoft.com': 'design',
-    'admin@dzignscapeprofessionals.onmicrosoft.com': 'admin',  # or use 'construction,design' if multi-access
+    # 👷 Abir has access to Construction
+    'abir@dzignscapeprofessionals.onmicrosoft.com': ['construction'],
+    # 🎨 Bokul has access to Design
+    'bokul@dzignscapeprofessionals.onmicrosoft.com': ['design'],
+    # 🛠️ Admin has access to all departments
+    'admin@dzignscapeprofessionals.onmicrosoft.com': ['construction', 'design', 'finance'],
 }
 
 # 🔐 Azure AD Login Redirect
@@ -151,6 +156,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # 🆔 Default Primary Key
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 
 
 

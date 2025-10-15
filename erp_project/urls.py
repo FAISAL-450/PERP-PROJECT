@@ -23,5 +23,7 @@ path('construction/', include('construction.urls')),
 path('design/', include('design.urls')),
 path('project/', include('project.urls')),               # Project logic (used by construction)
 path('client/', include('client.urls')),
+path('finance/', include('finance.urls')),
+path('account/', include('account.urls')),
 
 ]

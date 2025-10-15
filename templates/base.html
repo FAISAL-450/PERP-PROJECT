@@ -106,15 +106,17 @@
     <div class="sidebar-header">ERP SOLUTION</div>
     <ul class="sidebar-menu">
       {% with request.user.email as email %}
-        <!-- Always show Home -->
+
+        <!-- 🏠 Always show Home -->
         <li class="nav-item">
           <a href="{% url 'home' %}">
             <span><i class="fas fa-home"></i> Home</span>
           </a>
         </li>
 
-        <!-- Construction Section for Abir -->
+        <!-- 👤 Abir's Access -->
         {% if email == 'abir@dzignscapeprofessionals.onmicrosoft.com' %}
+          <!-- 👷 Construction Section -->
           <li class="dropdown">
             <a class="dropdown-toggle" role="button" aria-expanded="false">
               <span><i class="fas fa-hard-hat"></i> Construction</span>
@@ -124,10 +126,10 @@
               <li><a href="{% url 'project_dashboard' %}?department=construction">Project Detailed</a></li>
             </ul>
           </li>
-        {% endif %}
 
-        <!-- Design Section for Bokul -->
-        {% if email == 'bokul@dzignscapeprofessionals.onmicrosoft.com' %}
+        <!-- 👤 Bokul's Access -->
+        {% elif email == 'bokul@dzignscapeprofessionals.onmicrosoft.com' %}
+          <!-- 🎨 Design Section -->
           <li class="dropdown">
             <a class="dropdown-toggle" role="button" aria-expanded="false">
               <span><i class="fas fa-chart-line"></i> Design</span>
@@ -137,10 +139,10 @@
               <li><a href="{% url 'client_dashboard' %}?department=design">Client Detailed</a></li>
             </ul>
           </li>
-        {% endif %}
 
-        <!-- Superuser override -->
-        {% if email == 'admin@dzignscapeprofessionals.onmicrosoft.com' %}
+        <!-- 👤 Admin's Access -->
+        {% elif email == 'admin@dzignscapeprofessionals.onmicrosoft.com' %}
+          <!-- 👷 Admin: Construction -->
           <li class="dropdown">
             <a class="dropdown-toggle" role="button" aria-expanded="false">
               <span><i class="fas fa-hard-hat"></i> Construction</span>
@@ -150,6 +152,8 @@
               <li><a href="{% url 'project_dashboard' %}?department=construction">Project Detailed</a></li>
             </ul>
           </li>
+
+          <!-- 🎨 Admin: Design -->
           <li class="dropdown">
             <a class="dropdown-toggle" role="button" aria-expanded="false">
               <span><i class="fas fa-chart-line"></i> Design</span>
@@ -159,7 +163,19 @@
               <li><a href="{% url 'client_dashboard' %}?department=design">Client Detailed</a></li>
             </ul>
           </li>
+
+          <!-- 💰 Admin: Finance -->
+          <li class="dropdown">
+            <a class="dropdown-toggle" role="button" aria-expanded="false">
+              <span><i class="fas fa-coins"></i> Finance</span>
+              <i class="fa fa-chevron-down toggle-icon"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="{% url 'account:account_dashboard' %}?department=finance">Account Detailed</a></li>
+            </ul>
+          </li>
         {% endif %}
+
       {% endwith %}
     </ul>
   </div>
