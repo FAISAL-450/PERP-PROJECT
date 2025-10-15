@@ -16,110 +16,110 @@
   {% endif %}
 
   <!-- 📝 Account Form -->
-  <section class="form-section">
-    <header class="form-header" onclick="toggleForm()" role="button" aria-expanded="true">
-      <h2><i class="fas fa-university"></i> ACCOUNT FORM 
-        <span id="toggle-icon"><i class="fas fa-chevron-down"></i></span>
-      </h2>
-    </header>
+<section class="form-section">
+  <header class="form-header" onclick="toggleForm()" role="button" aria-expanded="true">
+    <h2><i class="fas fa-university"></i> ACCOUNT FORM 
+      <span id="toggle-icon"><i class="fas fa-chevron-down"></i></span>
+    </h2>
+  </header>
 
-    <div id="formContent" class="form-content" style="display: block;">
-      <form method="post" novalidate>
-        {% csrf_token %}
-        {{ form.non_field_errors }}
+  <div id="formContent" class="form-content" style="display: block;">
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {{ form.non_field_errors }}
 
-        <div class="form-grid">
-          {% for field in form.visible_fields %}
-            <div class="form-cell{% if field.name == 'description' %} full-width{% endif %}">
-              {{ field.label_tag }}
-              {{ field }}
-              {% if field.errors %}
-                <div class="field-error">{{ field.errors.0 }}</div>
-              {% endif %}
-            </div>
-          {% endfor %}
-        </div>
-
-        <div class="form-actions">
-          <button type="submit" class="btn green">
-            {% if mode == 'edit' %}Update{% else %}Save{% endif %}
-          </button>
-          {% if mode != 'list' %}
-            <a href="{% url 'account_dashboard' %}?q={{ query }}" class="btn gray">Cancel</a>
-          {% endif %}
-        </div>
-      </form>
-    </div>
-  </section>
-
-  <!-- 🔍 Filter/Search -->
-  <section class="filter-section">
-    <h2>🔍 FILTERING</h2>
-    <form method="get">
-      <input type="text" name="q" value="{{ query }}" placeholder="Search by name, code or description">
-      <button type="submit" class="btn blue">Filter</button>
-    </form>
-  </section>
-
-  <!-- 📋 Account List -->
-  <section class="table-section">
-    <header class="table-header">
-      <h2><i class="fas fa-list"></i> ACCOUNT LIST</h2>
-    </header>
-
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Code</th>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Currency</th>
-          <th>Cost Center</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for account in accounts %}
-          <tr>
-            <td>{{ account.id }}</td>
-            <td>{{ account.code }}</td>
-            <td>{{ account.name }}</td>
-            <td>{{ account.get_type_display }}</td>
-            <td>{{ account.currency }}</td>
-            <td>{{ account.cost_center|default:"—" }}</td>
-            <td>
-              <a href="{% url 'edit_account' account.id %}?q={{ query }}" class="btn yellow action-btn">
-                <i class="fas fa-edit"></i> Edit
-              </a>
-              <form method="post" action="{% url 'account_delete' account.id %}?q={{ query }}" style="display:inline;">
-                {% csrf_token %}
-                <button type="submit" class="btn red action-btn" onclick="return confirm('Delete this account?');">
-                  <i class="fas fa-trash-alt"></i> Delete
-                </button>
-              </form>
-            </td>
-          </tr>
-        {% empty %}
-          <tr><td colspan="7" class="no-data">No accounts found.</td></tr>
+      <div class="form-grid">
+        {% for field in form.visible_fields %}
+          <div class="form-cell{% if field.name == 'description' %} full-width{% endif %}">
+            {{ field.label_tag }}
+            {{ field }}
+            {% if field.errors %}
+              <div class="field-error">{{ field.errors.0 }}</div>
+            {% endif %}
+          </div>
         {% endfor %}
-      </tbody>
-    </table>
+      </div>
 
-    {% if accounts.paginator.num_pages > 1 %}
-      <footer class="pagination-footer">
-        <nav class="pagination" aria-label="Account pagination">
-          {% if accounts.has_previous %}
-            <a href="?q={{ query }}&page={{ accounts.previous_page_number }}" class="page-link">Previous</a>
-          {% endif %}
-          <span class="page-info">Page {{ accounts.number }} of {{ accounts.paginator.num_pages }}</span>
-          {% if accounts.has_next %}
-            <a href="?q={{ query }}&page={{ accounts.next_page_number }}" class="page-link">Next</a>
-          {% endif %}
-        </nav>
-      </footer>
-    {% endif %}
-  </section>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-green">
+          {% if mode == 'edit' %}Update{% else %}Save{% endif %}
+        </button>
+        {% if mode != 'list' %}
+          <a href="{% url 'account_dashboard' %}?q={{ query }}" class="btn btn-gray" role="button">Cancel</a>
+        {% endif %}
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- 🔍 Filter/Search -->
+<section class="filter-section">
+  <h2>🔍 FILTERING</h2>
+  <form method="get">
+    <input type="text" name="q" value="{{ query }}" placeholder="Search by name, code or description">
+    <button type="submit" class="btn btn-blue" aria-label="Apply filter">Filter</button>
+  </form>
+</section>
+
+<!-- 📋 Account List -->
+<section class="table-section">
+  <header class="table-header">
+    <h2><i class="fas fa-list"></i> ACCOUNT LIST</h2>
+  </header>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Code</th>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Currency</th>
+        <th>Cost Center</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for account in accounts %}
+        <tr>
+          <td>{{ account.id }}</td>
+          <td>{{ account.code }}</td>
+          <td>{{ account.name }}</td>
+          <td>{{ account.get_type_display }}</td>
+          <td>{{ account.currency }}</td>
+          <td>{{ account.cost_center|default:"—" }}</td>
+          <td>
+            <a href="{% url 'edit_account' account.id %}?q={{ query }}" class="btn btn-yellow action-btn" role="button" aria-label="Edit account {{ account.name }}">
+              <i class="fas fa-edit"></i> Edit
+            </a>
+            <form method="post" action="{% url 'account_delete' account.id %}?q={{ query }}" style="display:inline;">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-red action-btn" onclick="return confirm('Delete this account?');" aria-label="Delete account {{ account.name }}">
+                <i class="fas fa-trash-alt"></i> Delete
+              </button>
+            </form>
+          </td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="7" class="no-data">No accounts found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% if accounts.paginator.num_pages > 1 %}
+    <footer class="pagination-footer">
+      <nav class="pagination" aria-label="Account pagination">
+        {% if accounts.has_previous %}
+          <a href="?q={{ query }}&page={{ accounts.previous_page_number }}" class="btn page-link" role="button" aria-label="Previous page">Previous</a>
+        {% endif %}
+        <span class="page-info">Page {{ accounts.number }} of {{ accounts.paginator.num_pages }}</span>
+        {% if accounts.has_next %}
+          <a href="?q={{ query }}&page={{ accounts.next_page_number }}" class="btn page-link" role="button" aria-label="Next page">Next</a>
+        {% endif %}
+      </nav>
+    </footer>
+  {% endif %}
+</section>
 
 </div>
 
