@@ -15,41 +15,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-9^6na*me7)=)1b3_zx1kggfe@b7j)c(thip)3&&bbg*395le=f')
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
-# 🌍 Hosts and CSRF — Hardened for Azure
-try:
-    ALLOWED_HOSTS = json.loads(os.environ.get(
-        'DJANGO_ALLOWED_HOSTS',
-        '["localhost", "127.0.0.1", "perp-ac-app.azurewebsites.net"]'
-    ))
-except (json.JSONDecodeError, TypeError):
-    ALLOWED_HOSTS = ["localhost", "127.0.0.1", "perp-ac-app.azurewebsites.net"]
+# 🌍 Hosts and CSRF
+def get_json_env(key, default):
+    try:
+        return json.loads(os.environ.get(key, json.dumps(default)))
+    except (json.JSONDecodeError, TypeError):
+        return default
 
-try:
-    CSRF_TRUSTED_ORIGINS = json.loads(os.environ.get(
-        'CSRF_TRUSTED_ORIGINS',
-        '["https://perp-ac-app.azurewebsites.net"]'
-    ))
-except (json.JSONDecodeError, TypeError):
-    CSRF_TRUSTED_ORIGINS = [
-        "https://perp-ac-app.azurewebsites.net"
-    ]
-
-# 🔐 CSRF and Cookie Security for Azure
-CSRF_COOKIE_SECURE = not DEBUG
-SESSION_COOKIE_SECURE = not DEBUG
-CSRF_COOKIE_HTTPONLY = False
-
-# ✅ Trust Azure's HTTPS proxy
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
-# ⚠️ Prevent redirect loops: Let Azure handle HTTPS
-SECURE_SSL_REDIRECT = False
-
-# ✅ Optional: Enable HSTS headers only in production
-SECURE_HSTS_SECONDS = 3600 if not DEBUG else 0
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
-
+ALLOWED_HOSTS = get_json_env('DJANGO_ALLOWED_HOSTS', ['localhost', '127.0.0.1'])
+CSRF_TRUSTED_ORIGINS = get_json_env('CSRF_TRUSTED_ORIGINS', ['http://localhost', 'http://127.0.0.1'])
 
 # 📦 Installed Apps
 INSTALLED_APPS = [
@@ -79,7 +53,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'accounts.middleware.EnsureProfileAndDepartmentMiddleware',  # ✅ Custom middleware for profile and department mapping
+    # 'accounts.middleware.EnsureProfileMiddleware',  # 🔴 Removed due to missing module
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -121,15 +95,8 @@ TEMPLATES = [
 # 🗄️ Database
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DATABASE_NAME'),
-        'USER': os.environ.get('DATABASE_USER'),
-        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
-        'HOST': os.environ.get('DATABASE_HOST'),
-        'PORT': '5432',
-        'OPTIONS': {
-            'sslmode': 'require',
-        },
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
