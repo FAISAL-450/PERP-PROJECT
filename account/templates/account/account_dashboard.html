@@ -3,124 +3,153 @@
 {% block title %}Account Dashboard{% endblock %}
 {% block content %}
 
+<!-- 📦 Main Dashboard Container -->
 <div class="dashboard-wrapper">
 
-  <!-- 🔔 Flash Messages -->
+  <!-- 🔔 Flash Messages Section -->
   {% if messages %}
     {% for message in messages %}
-      <div class="alert-box" role="alert">
+      <div class="alert-box">
         {{ message }}
-        <button class="close-btn" aria-label="Close message" onclick="this.parentElement.style.display='none';">×</button>
+        <button class="close-btn" onclick="this.parentElement.style.display='none';">×</button>
       </div>
     {% endfor %}
   {% endif %}
 
-  <!-- 📝 Account Form -->
+  <!-- 📝 Grid-Based Account Form Section -->
   <section class="form-section">
-    <header class="form-header" onclick="toggleForm()" role="button" aria-expanded="true" tabindex="0">
-      <h2><i class="fas fa-university"></i> ACCOUNT FORM 
-        <span id="toggle-icon"><i class="fas fa-chevron-down"></i></span>
-      </h2>
+    <header class="form" onclick="toggleForm()">
+      <h2><i class="fas fa-university"></i> ACCOUNT FORM <span id="toggle-icon"><i class="fas fa-chevron-down"></i></span></h2>
     </header>
 
     <div id="formContent" class="form-content" style="display: block;">
-      <form method="post" action="{% url 'account_dashboard' %}" novalidate>
+      <form method="post">
         {% csrf_token %}
         {{ form.non_field_errors }}
 
+        <!-- Grid Layout -->
         <div class="form-grid">
-          {% for field in form.visible_fields %}
-            <div class="form-cell{% if field.name == 'description' %} full-width{% endif %}">
-              {{ field.label_tag }}
-              {{ field }}
-              {% if field.errors %}
-                <div class="field-error">{{ field.errors.0 }}</div>
-              {% endif %}
-            </div>
-          {% endfor %}
+          <div class="form-cell">
+            {{ form.account_name.label_tag }}
+            {{ form.account_name }}
+          </div>
+          <div class="form-cell">
+            {{ form.account_code.label_tag }}
+            {{ form.account_code }}
+          </div>
+          <div class="form-cell">
+            {{ form.account_type.label_tag }}
+            {{ form.account_type }}
+          </div>
+          <div class="form-cell">
+            {{ form.account_description.label_tag }}
+            {{ form.account_description }}
+          </div>
+          <div class="form-cell">
+            {{ form.currency.label_tag }}
+            {{ form.currency }}
+          </div>
+          <div class="form-cell">
+            {{ form.cost_center.label_tag }}
+            {{ form.cost_center }}
+          </div>
+          <div class="form-cell">
+            {{ form.status.label_tag }}
+            {{ form.status }}
+          </div>
         </div>
 
+        <!-- Form Actions -->
         <div class="form-actions">
-          <button type="submit" class="btn btn-green">
+          <button type="submit" class="btn green">
             {% if mode == 'edit' %}Update{% else %}Save{% endif %}
           </button>
           {% if mode != 'list' %}
-            <a href="{% url 'account_dashboard' %}?q={{ query }}" class="btn btn-gray">Cancel</a>
+            <a href="{% url 'account_dashboard' %}" class="btn gray">Cancel</a>
           {% endif %}
         </div>
       </form>
     </div>
   </section>
 
-  <!-- 🔍 Filter/Search -->
+  <!-- 🔍 Filter/Search Section -->
   <section class="filter-section">
     <h2>🔍 FILTERING</h2>
-    <form method="get" action="{% url 'account_dashboard' %}">
-      <input type="text" name="q" value="{{ query }}" placeholder="Search by name, code or description">
-      <button type="submit" class="btn btn-blue" aria-label="Apply filter">Filter</button>
+    <form method="get">
+      <input type="text" name="q" value="{{ query }}" placeholder="Search by account name">
+      <button type="submit" class="btn blue">Filter</button>
     </form>
   </section>
 
-  <!-- 📋 Account List -->
-  <section class="table-section">
-    <header class="table-header">
-      <h2><i class="fas fa-list"></i> ACCOUNT LIST</h2>
-    </header>
+  
+  <!-- 📋 Account List Section -->
+<section class="table-section">
+  <header class="table-header">
+    <h2><i class="fas fa-list"></i> ACCOUNT LIST</h2>
+  </header>
 
-    <table>
-      <thead>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th> <!-- Sequential number -->
+        <th>Account Name</th>
+        <th>Account Code</th>
+        <th>Account Type</th>
+        <th>Description</th>
+        <th>Currency</th>
+        <th>Cost Center</th>
+        <th>Status</th>
+        <th>Actions Button</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for account in accounts %}
         <tr>
-          <th>ID</th>
-          <th>Code</th>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Currency</th>
-          <th>Cost Center</th>
-          <th>Actions</th>
+          <td>{{ forloop.counter }}</td> <!-- Sequential number -->
+          <td>{{ account.account_name }}</td>
+          <td>{{ account.account_code }}</td>
+          <td>{{ account.account_type }}</td>
+          <td>{{ account.account_description|default:"—" }}</td>
+          <td>{{ account.currency }}</td>
+          <td>{{ account.cost_center }}</td>
+          <td>
+            <span class="status-tag {% if account.status == 'ACTIVE' %}active{% else %}inactive{% endif %}">
+              {{ account.status }}
+            </span>
+          </td>
+          <td>
+            <a href="{% url 'edit_account' account.id %}" class="btn yellow action-btn">
+              <i class="fas fa-edit"></i> Edit
+            </a>
+            <form method="post" action="{% url 'account_delete' account.id %}" style="display:inline;">
+              {% csrf_token %}
+              <button type="submit" class="btn red action-btn" onclick="return confirm('Delete this account?');">
+                <i class="fas fa-trash-alt"></i> Delete
+              </button>
+            </form>
+          </td>
         </tr>
-      </thead>
-      <tbody>
-        {% for account in accounts %}
-          <tr>
-            <td>{{ account.id }}</td>
-            <td>{{ account.code }}</td>
-            <td>{{ account.name }}</td>
-            <td>{{ account.get_type_display }}</td>
-            <td>{{ account.currency }}</td>
-            <td>{{ account.cost_center|default:"—" }}</td>
-            <td>
-              <a href="{% url 'edit_account' account.id %}?q={{ query }}" class="btn btn-yellow action-btn" aria-label="Edit account {{ account.name }}">
-                <i class="fas fa-edit"></i> Edit
-              </a>
-              <form method="post" action="{% url 'account_delete' account.id %}?q={{ query }}" style="display:inline;">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-red action-btn" onclick="return confirm('Delete this account?');" aria-label="Delete account {{ account.name }}">
-                  <i class="fas fa-trash-alt"></i> Delete
-                </button>
-              </form>
-            </td>
-          </tr>
-        {% empty %}
-          <tr><td colspan="7" class="no-data">No accounts found.</td></tr>
-        {% endfor %}
-      </tbody>
-    </table>
+      {% empty %}
+        <tr><td colspan="9" class="no-data">No accounts found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
 
-    {% if accounts.paginator.num_pages > 1 %}
-      <footer class="pagination-footer">
-        <nav class="pagination" aria-label="Account pagination">
-          {% if accounts.has_previous %}
-            <a href="?q={{ query }}&page={{ accounts.previous_page_number }}" class="btn page-link" aria-label="Previous page">Previous</a>
-          {% endif %}
-          <span class="page-info">Page {{ accounts.number }} of {{ accounts.paginator.num_pages }}</span>
-          {% if accounts.has_next %}
-            <a href="?q={{ query }}&page={{ accounts.next_page_number }}" class="btn page-link" aria-label="Next page">Next</a>
-          {% endif %}
-        </nav>
-      </footer>
-    {% endif %}
-  </section>
-
+  <!-- 📋 Paginator Section -->
+  {% if accounts.paginator.num_pages > 1 %}
+    <footer class="pagination-footer">
+      <nav class="pagination">
+        {% if accounts.has_previous %}
+          <a href="?q={{ query }}&page={{ accounts.previous_page_number }}" class="page-link">Previous</a>
+        {% endif %}
+        <span class="page-info">Page {{ accounts.number }} of {{ accounts.paginator.num_pages }}</span>
+        {% if accounts.has_next %}
+          <a href="?q={{ query }}&page={{ accounts.next_page_number }}" class="page-link">Next</a>
+        {% endif %}
+      </nav>
+    </footer>
+  {% endif %}
 </div>
 
 <!-- 🔧 Toggle Script -->
@@ -128,10 +157,16 @@
   function toggleForm() {
     const form = document.getElementById('formContent');
     const icon = document.getElementById('toggle-icon').querySelector('i');
-    const isHidden = form.style.display === 'none';
-    form.style.display = isHidden ? 'block' : 'none';
-    icon.classList.toggle('fa-chevron-down', !isHidden);
-    icon.classList.toggle('fa-chevron-up', isHidden);
+
+    if (form.style.display === 'none') {
+      form.style.display = 'block';
+      icon.classList.remove('fa-chevron-down');
+      icon.classList.add('fa-chevron-up');
+    } else {
+      form.style.display = 'none';
+      icon.classList.remove('fa-chevron-up');
+      icon.classList.add('fa-chevron-down');
+    }
   }
 
   document.addEventListener('DOMContentLoaded', function () {
@@ -145,6 +180,7 @@
     }
   });
 </script>
+
 
 <!-- 🎨 Custom CSS -->
 <style>

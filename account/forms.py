@@ -5,45 +5,54 @@ class AccountForm(forms.ModelForm):
     class Meta:
         model = Account
         fields = [
-            'name',
-            'code',
-            'type',
-            'description',
-            'is_active',
+            'account_name',
+            'account_code',
+            'account_type',
+            'account_description',
             'currency',
             'cost_center',
+            'status',
         ]
+
+        labels = {
+            'account_name': 'Account Name',
+            'account_code': 'Account Code',
+            'account_type': 'Account Type',
+            'account_description': 'Description',
+            'currency': 'Currency',
+            'cost_center': 'Cost Center',
+            'status': 'Status',
+        }
+
         widgets = {
-            'name': forms.TextInput(attrs={
-                'placeholder': 'Account Name',
+            'account_name': forms.Select(attrs={
                 'class': 'form-control',
-                'autofocus': 'autofocus'
+                'placeholder': 'Select account name'
             }),
-            'code': forms.TextInput(attrs={
-                'placeholder': 'e.g. ACC-1001',
-                'class': 'form-control'
+            'account_code': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter account code'
             }),
-            'type': forms.Select(attrs={
-                'class': 'form-control'
+            'account_type': forms.Select(attrs={
+                'class': 'form-control',
+                'placeholder': 'Select account type'
             }),
-            'description': forms.Textarea(attrs={
-                'rows': 3,
-                'placeholder': 'Optional description',
-                'class': 'form-control'
+            'account_description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 2,
+                'placeholder': 'Enter description'
             }),
-            'currency': forms.TextInput(attrs={
-                'placeholder': 'e.g. USD',
-                'class': 'form-control'
+            'currency': forms.Select(attrs={
+                'class': 'form-control',
+                'placeholder': 'Select currency'
             }),
-            'cost_center': forms.TextInput(attrs={
-                'placeholder': 'e.g. Marketing, IT',
-                'class': 'form-control'
+            'cost_center': forms.Select(attrs={
+                'class': 'form-control',
+                'placeholder': 'Select cost center'
             }),
-            'is_active': forms.CheckboxInput(attrs={
-                'class': 'form-check-input'
+            'status': forms.Select(attrs={
+                'class': 'form-control',
+                'placeholder': 'Select status'
             }),
         }
 
-    def clean_code(self):
-        code = self.cleaned_data['code']
-        return code.upper().strip()
