@@ -39,7 +39,7 @@ class AccountForm(forms.ModelForm):
             }),
             'account_description': forms.Textarea(attrs={
                 'class': 'form-control',
-                'rows': 2,
+                'rows': 1,
                 'placeholder': 'Enter description'
             }),
             'currency': forms.Select(attrs={

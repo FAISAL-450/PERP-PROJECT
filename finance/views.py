@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from account.models import Account
+from journalentry.models import JournalEntry
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 # 🔁 Reusable Pagination Function
@@ -24,6 +25,20 @@ def finance_ac_list(request):
 
     return render(request, 'finance/finance_ac_list.html', {
         'accounts': accounts_page,
+        'query': query
+    })
+
+# 📘 Finance Journal Entry Detailed View
+def finance_je_list(request):
+    query = request.GET.get('q', '').strip()
+    journalentries = JournalEntry.objects.all()
+    if query:
+        journalentries = journalentries.filter(description__icontains=query)
+
+    journalentries_page = get_paginated_queryset(request, journalentries, per_page=10)
+
+    return render(request, 'finance/finance_je_list.html', {
+        'journalentries': journalentries_page,
         'query': query
     })
 

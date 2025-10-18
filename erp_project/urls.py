@@ -25,5 +25,6 @@ path('project/', include('project.urls')),               # Project logic (used b
 path('client/', include('client.urls')),
 path('finance/', include('finance.urls')),
 path('account/', include('account.urls')),
+path('journalentry/', include('journalentry.urls')),
 
 ]

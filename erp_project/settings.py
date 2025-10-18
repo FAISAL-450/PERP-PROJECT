@@ -70,6 +70,8 @@ INSTALLED_APPS = [
     'accounts',
     'finance',
     'account',
+    'journalentry',
+
 ]
 
 # 🧱 Middleware
@@ -91,7 +93,7 @@ DEPARTMENT_EMAIL_MAP = {
     # 🎨 Bokul has access to Design
     'bokul@dzignscapeprofessionals.onmicrosoft.com': ['design'],
     # 🛠️ Admin has access to all departments
-    'admin@dzignscapeprofessionals.onmicrosoft.com': ['construction', 'design', 'finance'],
+    'admin@dzignscapeprofessionals.onmicrosoft.com': ['construction', 'design', 'finance',],
 }
 
 # 🔐 Azure AD Login Redirect
@@ -156,7 +158,6 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # 🆔 Default Primary Key
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 
 
 
