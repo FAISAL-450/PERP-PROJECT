@@ -50,7 +50,6 @@ SECURE_HSTS_SECONDS = 3600 if not DEBUG else 0
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 
-
 # 📦 Installed Apps
 INSTALLED_APPS = [
     # Django Core
@@ -71,7 +70,7 @@ INSTALLED_APPS = [
     'finance',
     'account',
     'journalentry',
-
+    'transaction',
 ]
 
 # 🧱 Middleware

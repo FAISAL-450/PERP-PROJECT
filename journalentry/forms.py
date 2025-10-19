@@ -28,7 +28,7 @@ class JournalEntryForm(forms.ModelForm):
             }),
             'description': forms.Textarea(attrs={
                 'class': 'form-control',
-                'rows': 2,
+                'rows': 1,
                 'placeholder': 'Enter description'
             }),
             'debit_account': forms.Select(attrs={

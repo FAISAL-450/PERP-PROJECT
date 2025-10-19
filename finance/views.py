@@ -28,6 +28,18 @@ def finance_ac_list(request):
         'query': query
     })
 
+# 📘 Finance Transaction Entry Detailed View
+def finance_tn_list(request):
+    query = request.GET.get('q', '').strip()
+    transactions = Transaction.objects.all()
+    if query:
+        transactions = transactions.filter(status__icontains=query)
+    transactions_page = get_paginated_queryset(request, transactions, per_page=10)
+    return render(request, 'finance/finance_tn_list.html', {
+        'transactions': transactions_page,
+        'query': query
+    })
+
 # 📘 Finance Journal Entry Detailed View
 def finance_je_list(request):
     query = request.GET.get('q', '').strip()
