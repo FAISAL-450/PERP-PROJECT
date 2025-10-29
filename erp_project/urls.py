@@ -25,7 +25,11 @@ path('project/', include('project.urls')),               # Project logic (used b
 path('client/', include('client.urls')),
 path('finance/', include('finance.urls')),
 path('account/', include('account.urls')),
-path('journalentry/', include('journalentry.urls')),
 path('transaction/', include('transaction.urls')),
+path('journalentry/', include('journalentry.urls')),
+path('salesmarketing/', include('salesmarketing.urls')),
+path('lead/', include('lead.urls')),
+path('customerdetailed/', include('customerdetailed.urls')),
+path('accounts/', include('accounts.urls')),
 
 ]

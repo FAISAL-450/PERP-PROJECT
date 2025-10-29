@@ -59,8 +59,3 @@ class EnsureProfileAndDepartmentMiddleware:
             logger.info("⚠️ No Azure AD principal found — user remains anonymous")
 
         return self.get_response(request)
-
-
-
-
-

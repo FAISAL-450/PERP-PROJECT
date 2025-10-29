@@ -4,18 +4,11 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     department = models.CharField(max_length=50, choices=[
         ('construction', 'Construction'),
-        ('Design', 'Design'),
+        ('design', 'Design'),
+        ('finance', 'Finance'),
+        ('salesmarketing', 'Sales & Marketing'),
+        
     ])
     def __str__(self):
         return f"{self.user.username} - {self.department}"
-
-
-
-
-
-
-
-
-
-
 
